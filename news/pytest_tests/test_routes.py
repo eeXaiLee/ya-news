@@ -11,7 +11,7 @@ from pytest_lazy_fixtures import lf
     'name, args, method',
     (
         ('news:home', None, lf('client.get')),
-        ('news:detail', lf('id_for_args'), lf('client.get')),
+        ('news:detail', lf('news_id_for_args'), lf('client.get')),
         ('users:login', None, lf('client.get')),
         ('users:logout', None, lf('client.post')),
         ('users:signup', None, lf('client.get')),
