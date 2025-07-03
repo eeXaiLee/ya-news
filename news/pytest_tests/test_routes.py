@@ -18,6 +18,7 @@ from pytest_lazy_fixtures import lf
     ),
 )
 def test_public_pages_available_for_anonymous_user(name, args, method):
+    """Публичные страницы доступны анонимному пользователю."""
     url = reverse(name, args=args)
     response = method(url)
     assert response.status_code == HTTPStatus.OK
@@ -37,6 +38,7 @@ def test_public_pages_available_for_anonymous_user(name, args, method):
 def test_availability_for_comment_edit_and_delete(
     parametrized_client, expected_status, name, comment_for_args
 ):
+    """Удаление и редактирование комментария доступны автору комментария."""
     url = reverse(name, args=comment_for_args)
     response = parametrized_client.get(url)
     assert response.status_code == expected_status
@@ -48,6 +50,7 @@ def test_availability_for_comment_edit_and_delete(
     ('news:edit', 'news:delete'),
 )
 def test_redirect_for_anonymous_client(client, name, comment_for_args):
+    """Анонимный пользователь перенаправляется на страницу входа."""
     login_url = reverse('users:login')
     url = reverse(name, args=comment_for_args)
     expected_url = f'{login_url}?next={url}'

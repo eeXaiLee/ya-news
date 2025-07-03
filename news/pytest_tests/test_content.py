@@ -11,6 +11,7 @@ from news.models import Comment
 
 @pytest.mark.django_db
 def test_news_count(client, news_list):
+    """На главной странице отображается правильное количество новостей."""
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']
@@ -20,6 +21,7 @@ def test_news_count(client, news_list):
 
 @pytest.mark.django_db
 def test_news_order(client):
+    """Новости на главной странице отсортированы от новых к старым."""
     url = reverse('news:home')
     response = client.get(url)
     object_list = response.context['object_list']
@@ -29,6 +31,7 @@ def test_news_order(client):
 
 @pytest.mark.django_db
 def test_comments_order(client, news, author, news_id_for_args):
+    """Комментарии на странице новости отсортированы от старых к новым."""
     now = timezone.now()
     for index in range(10):
         comment = Comment.objects.create(
@@ -49,6 +52,7 @@ def test_comments_order(client, news, author, news_id_for_args):
 
 @pytest.mark.django_db
 def test_anonymous_client_has_no_form(client, news_id_for_args):
+    """Анонимному пользователю недоступна форма для отправки комментария."""
     url = reverse('news:detail', args=news_id_for_args)
     response = client.get(url)
     assert 'form' not in response.context
@@ -56,6 +60,7 @@ def test_anonymous_client_has_no_form(client, news_id_for_args):
 
 @pytest.mark.django_db
 def test_authorized_user_has_form(author_client, news_id_for_args):
+    """Авторизованному пользователю доступна форма для отправки комментария."""
     url = reverse('news:detail', args=news_id_for_args)
     response = author_client.get(url)
     assert 'form' in response.context
